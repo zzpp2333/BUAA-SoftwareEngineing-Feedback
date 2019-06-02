@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Student - Grade</title>
+<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="/static/js/echarts.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<link href="/static/css/bootstrap.min.css" rel="stylesheet">
+<link href="/static/css/datepicker3.css" rel="stylesheet">
+<link href="/static/css/styles.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+<script src="/static/js/html5shiv.js"></script>
+<script src="/static/js/respond.min.js"></script>
+<![endif]-->
+
+</head>
+
+<body>
+	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#sidebar-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#"><span>Student</span>System</a>
+				<ul class="user-menu">
+					<li class="dropdown pull-right">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> <label id = "username"></label> <span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="#"><span class="glyphicon glyphicon-user"></span> 信息修改</a></li>
+							<li><a href="#"><span class="glyphicon glyphicon-cog"></span> 设置</a></li>
+							<li><a href="/accounts/logout/"><span class="glyphicon glyphicon-log-out"></span> 登出</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+							
+		</div><!-- /.container-fluid -->
+	</nav>
+		
+	<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+		<form role="search">
+			<div class="form-group">
+				<input type="text" class="form-control" placeholder="Search">
+			</div>
+		</form>
+		<ul class="nav menu" id="menu">
+			<li ><a href="/stu_resource/"><span class="glyphicon glyphicon-dashboard"></span> 课程资源</a></li>
+			<li><a href="/stu_pt/"><span class="glyphicon glyphicon-th"></span> 计划表</a></li>
+			<li class="active"><a href="/stu_grade/"><span class="glyphicon glyphicon-stats"></span> 成绩</a></li>
+			<li ><a href="/stu_chat_forhead/"><span class="glyphicon glyphicon-list-alt"></span> 讨论区</a></li>
+			<li ><a href="/stu_hw/"><span class="glyphicon glyphicon-pencil"></span> 作业</a></li>
+			<li ><a href="/assistant_resource2/"><span class="glyphicon glyphicon-share-alt"></span> 申请成为助教</a></li>
+			<li role="presentation" class="divider"></li>
+		</ul>
+	</div>
+		
+	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">			
+		<div class="row">
+			<ol class="breadcrumb">
+				<li><a href="#"><span class="glyphicon glyphicon-home"></span></a></li>
+				<li class="active">成绩</li>
+			</ol>
+		</div><!--/.row-->
+		
+		<div class="row">
+			<div class="col-lg-12">
+				<h1 class="page-header">成绩</h1>
+				
+			</div>
+		</div><!--/.row-->
+		
+		<table border="1" id="table">
+		    <tr>
+		        <th>name</th>
+		        <th>number</th>
+		        <th>grade</th>
+		    </tr>
+
+		</table>
+	<p id="TwoLineChart" style="width:100%; height:400px;"></p>
+											
+	</div>	<!--/.main-->
+
+	
+
+	<script src="/static/js/jquery-1.11.1.min.js"></script>
+	<script src="/static/js/bootstrap.min.js"></script>
+	<script src="/static/js/chart.min.js"></script>
+	<script src="/static/js/easypiechart.js"></script>
+	<script src="/static/js/easypiechart-data.js"></script>
+	<script src="/static/js/bootstrap-datepicker.js"></script>
+	<script>
+		$(function(){
+			$.ajax({
+				type : "GET",//请求方式
+				url : "/accounts/getUserInfos/",//地址，就是json文件的请求路径
+				dataType : "json",//数据类型可以为 text xml json  script  jsonp
+　　　　　　　　success : function(data){//返回的参数就是 action里面所有的有get和set方法的参数
+					if(data.permission == 3){//表示是助教 显示助教工作区 	
+						$("#menu").append("<li >< a href=' '><span class='glyphicon glyphicon-stats'></span> 助教工作区</ a></li>");
+					}
+					document.getElementById('username').innerHTML = data.username;
+				},
+			});
+		});	
+	</script>
+	<script>
+    $(function () {//成绩的后端还没做
+        $.ajax({
+            type: "POST",
+            url: "/static/new.json",
+            dataType: "json",
+            success : function(data){
+                var html="";
+                $.each(data,function (i,trdata){
+                    html+="<tr>" +
+                            "<td class='sco1'>"+trdata['name']+"</td>" +
+                            "<td class='sco2'>"+trdata['num']+"</td>" +
+                            "<td class='sco3'>"+trdata['grade']+"</td>" +
+                            "</tr>";
+                });
+                $("#table").append(html);
+                $("#table .row:odd").addClass("gray1");
+                $("#table .row:even").addClass("gray2");
+            }
+
+        });
+
+        $("#table").bind("click","table .row",function (ev) {  //该方法有效
+            $(ev.target).parent().css("background","red");
+        })
+
+    })
+</script>
+
+<script type="text/JavaScript">
+ 
+function loadTwoLine() {
+    var myChart = echarts.init(document.getElementById('TwoLineChart'));
+    // 显示标题，图例和空的坐标轴
+    myChart.setOption({
+        title: {
+            text: '成绩分布图'
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data: ['平均成绩', '最高成绩']
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                mark: { show: true },
+                dataView: { show: true, readOnly: false },
+                magicType: { show: true, type: ['line', 'bar'] },
+                restore: { show: true },
+                saveAsImage: { show: true }
+            }
+        },
+        calculable: true,
+        xAxis: {
+            type: 'category',
+            boundaryGap: false, //取消左侧的间距
+            data: []
+        },
+        yAxis: {
+            type: 'value',
+            splitLine: { show: false },//去除网格线
+            name: ''
+        },
+        series: [{
+            name: '平均分',
+            type: 'line',
+            symbol: 'emptydiamond',    //设置折线图中表示每个坐标点的符号 emptycircle：空心圆；emptyrect：空心矩形；circle：实心圆；emptydiamond：菱形
+            data: []
+        },
+        {
+            name: '最高分',
+            type: 'line',
+            symbol: 'emptydiamond',    //设置折线图中表示每个坐标点的符号 emptycircle：空心圆；emptyrect：空心矩形；circle：实心圆；emptydiamond：菱形
+            data: []
+        }]
+    });
+    myChart.showLoading();    //数据加载完之前先显示一段简单的loading动画
+    var names = [];    //类别数组（实际用来盛放X轴坐标值）    
+    var series1 = [];
+    var series2 = [];
+    $.ajax({
+        type: 'get',
+        url: '/static/new2.json',//请求数据的地址
+        dataType: "json",        //返回数据形式为json
+        success: function (result) {
+            //请求成功时执行该函数内容，result即为服务器返回的json对象           
+            $.each(result.jinJian, function (index, item) {
+                names.push(item.AREA);    //挨个取出类别并填入类别数组
+                series1.push(item.LANDNUM);
+            });
+            $.each(result.banJie, function (index, item) {
+                series2.push(item.LANDNUM);
+            });
+            myChart.hideLoading();    //隐藏加载动画
+            myChart.setOption({        //加载数据图表
+                xAxis: {
+                    data: names
+                },
+                series: [{                    
+                    data: series1
+                },
+                {
+                    data: series2
+                }]
+            });
+        },
+        error: function (errorMsg) {
+            //请求失败时执行该函数
+            alert("图表请求数据失败!");
+            myChart.hideLoading();
+        }
+    });
+};
+loadTwoLine();
+</script>
+
+</body>
+
+</html>

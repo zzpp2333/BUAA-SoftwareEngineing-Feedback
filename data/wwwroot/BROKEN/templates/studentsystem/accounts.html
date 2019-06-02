@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Account</title>
+		<!--用百度的静态资源库的cdn安装bootstrap环境-->
+		<!-- Bootstrap 核心 CSS 文件 -->
+		<link href="/static/css/bootstrap.min.css" rel="stylesheet">
+		<!--font-awesome 核心我CSS 文件-->
+		<link href="/static/css/font-awesome.min.css" rel="stylesheet">
+		<!-- 在bootstrap.min.js 之前引入 -->
+		<script src="http://apps.bdimg.com/libs/jquery/2.0.0/jquery.min.js"></script>
+		<!-- Bootstrap 核心 JavaScript 文件 -->
+		<script src="/static/js/bootstrap.min.js"></script>
+		<!--jquery.validate-->
+		<script type="text/javascript" src="/static/js/jquery.validate.min.js" ></script>
+		<script type="text/javascript" src="/static/js/message.js" ></script>
+		
+		<!-- 以下内容按css解析 --><!-- 保证在不同大小的屏幕上都能全覆盖 --><!-- 设置为半透明的背景色 --><!-- 登录界面显示 --><!-- 注册界面隐藏 -->
+		<style type="text/css">
+			body{background: url(/static/imgs/4.jpg) no-repeat;background-size: cover;font-size: 16px;}
+			.form{background: rgba(255,255,255,0.2);width:400px;margin:100px auto;}
+			#login_form{display: block;}
+			.fa{display: inline-block;top: 27px;left: 6px;position: relative;color: #ccc;}
+			input[type="text"],input[type="password"]{padding-left:26px;}
+			.checkbox{padding-left:21px;}
+		</style>
+	</head>
+	<body>
+		<!--
+			基础知识：
+			网格系统:通过行和列布局
+			行必须放在container内
+			手机用col-xs-*
+			平板用col-sm-*
+			笔记本或普通台式电脑用col-md-*
+			大型设备台式电脑用col-lg-*
+			为了兼容多个设备，可以用多个col-*-*来控制；
+		-->
+	<fieldset>
+		<div class="control-group">
+			<label class="control-label" for="username">Username</label>
+			<div class="controls">
+				<input type="text" class="input-medium disabled" id="username" disabled="" />
+				<a class="help-block">Your username is for logging in and cannot be changed.</a>
+			</div> 
+		</div> 
+		<div class="control-group">
+			<label class="control-label" for="username">Userno</label>
+			<div class="controls">
+				<input type="text" class="input-medium disabled" id="userno" disabled="" />
+				<a class="help-block">Your userno cannot be changed.</a>
+			</div> 
+		</div>  
+		<div class="control-group">
+			<label class="control-label" for="email">Email Address</label>
+			<div class="controls">
+				<input type="text" class="input-large" id="email" disabled="" />
+				<a class="help-block">Your email cannot be changed.</a>
+			</div> 
+		</div> 
+		<div class="control-group">
+			<label class="control-label" for="password">Password</label>
+			<div class="controls">
+				<input type="password" class="input-medium" id="password" value="password" />
+			</div> 
+		</div> 
+		
+		<div class="form-actions">
+			<button type="submit" class="btn btn-primary">Save</button>
+			<button  class="btn btn-primary text-success">Cancel</button>
+		</div> 
+	</fieldset>
+
+    <script>
+		$(function(){
+			$.ajax({
+				type : "GET",//请求方式
+				url : "/accounts/getUserInfos/",//地址，就是json文件的请求路径
+				dataType : "json",//数据类型可以为 text xml json  script  jsonp
+　　　　　　　　success : function(data){//返回的参数就是 action里面所有的有get和set方法的参数
+					document.getElementById('username').value = data.username;
+					document.getElementById('userno').value = data.userno;
+					document.getElementById('email').value = data.email;
+				},
+			});
+		});	
+	</script>
+	</body>
+</html>
