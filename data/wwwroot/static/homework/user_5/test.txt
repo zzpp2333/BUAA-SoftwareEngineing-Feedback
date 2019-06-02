@@ -1,0 +1,30 @@
+const int a = +1;
+const int B = 0 , _c = -30 , _d = 49;
+const char c_ = 'c';
+const char c_0 = '_',c_1 = '+',_c_2 = '-',C3 = '*',C_4 = '/',_C_5_='0';
+int num;
+char ch;
+int array[100];
+char str[10];
+int n1,n_2,N3,array1[10],N_4;
+char s_0[9],c1,C2,C4;
+int add(int x,int y){
+	return (x + y);
+}
+int n(int x){		
+	if(x==1)
+      	    return (x);
+	else
+	    return (x-1);
+}
+char getch{
+	const char ch = '_';
+	return (ch);
+}
+void print_hello{
+	printf("Hello world!");
+}
+void main(){
+	ch = getch;
+	print_hello();
+}
