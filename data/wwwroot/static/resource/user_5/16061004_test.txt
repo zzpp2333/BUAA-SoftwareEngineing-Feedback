@@ -1,0 +1,186 @@
+const int a = +1;
+const int B = 0 , _c = -30 , _d = 49;
+const char c_ = 'c';
+const char c_0 = '_',c_1 = '+',_c_2 = '-',C3 = '*',C_4 = '/',_C_5_='0';
+int num;
+char ch;
+int array[100];
+char str[10];
+int n1,n_2,N3,array1[10],N_4;
+char s_0[9],c1,C2,C4;
+int add(int x,int y){
+	return (x + y);
+}
+int n(int x){		
+	if(x==1)
+      	    return (x);
+	else
+	    return (x-1);
+}
+char getch{
+	const char ch = '_';
+	return (ch);
+}
+void print_hello{
+	printf("Hello world!");
+}
+
+void print_num(int n){    
+	printf(n);   
+}
+
+void print_char(char c){ 
+	printf(c);
+}
+
+void print_all(int a){    
+	printf("a=",a);
+}
+void print_calculate_int_int(int a,int b){		
+	printf(a+b);
+}
+void print_calculate_int_char(int a,char c){
+	printf(a+c);
+}
+int add_10(int x){ 
+	const int ax = 10;
+	return (x + ax);
+}
+
+int add_a(int x){
+	int aa;     
+	aa = 112;
+	return (x + aa);
+}
+
+int add_1_a(int x){
+	const int ca = 13; 
+	int axx;
+	axx = 14;
+	return (x + ca + axx);
+}
+void nul{
+	{{{{{;}}}}}
+	;
+}
+void main(){
+	const int a0a = 1;
+	int a1a,a2a,array11[1000],i,j,k;
+	char cha;
+	a1a = 2;
+	a2a = 4 - 1;
+	i = a1a;
+	array11[0] = 9;
+	array11[i * a2a] = a1a + a2a;
+	num = +1;
+	print_all(num);
+	n1 = -2;
+	print_all(n1);
+	n_2 = ++3;	
+	print_all(n_2);
+	N3 = +-4 ;	
+	print_all(N3);
+	N_4 = -+5;	
+	print_all(N_4);
+	array1[0] = --9;	 
+	print_all(array[0]);
+	k = -array11[6] + n1 * (- i - N3 / array1[0]) + add(N_4,n_2);
+	print_all(k);
+	ch = 'a';
+	print_char(ch);
+	str[1] = 'A';
+	print_char(str[1]);
+	s_0[2] = '+';
+	print_char(s_0[2]);
+	c1 = '-';
+	print_char(c1);
+	C2 = '*'; 
+	print_char(c3);
+	C4 = '_';
+	print_char(C_4);
+	print_calculate_int_int(a,B);
+	print_calculate_int_char(a,c_); 
+	if(a0a){
+		array11[2] = array[0] + i;
+		print_num(array11[2]);
+	}
+	else
+		print_num(a1a + 1);
+	a1a = a1a + 1;
+	if(a1a > 2){
+		a1a = a1a - a0a;
+		a1a = a1a * 2;
+		print_num(a1a);
+	}
+	else{
+		i = 10;
+		print_num(i);
+	}
+	if(i >= 9) {
+		i = 1;
+		print_num(i);
+	}
+	else{
+		i = -4;
+		print_num(i);
+	}
+	if(i != 9) {
+		i = +9;
+		print_num(i);
+	}
+	else{
+		i = 9;
+		print_num(i);
+	}
+	printf("i",i);
+	j = 5;
+	do{
+		switch(i){
+			case 0: print_num(i);
+			case 1:{
+				cha = 'c';
+				print_char(cha);
+			}
+			case 2: print_all(i);
+			case 3: print_hello;
+			case 4: print_all(i);
+			default: ;
+		}
+		i = i + 1;
+	}while(i < j)
+	cha = 'd';
+	do{
+		nul;		
+		switch(cha){
+			case '2': print_num(i);
+			case 'd': print_all(i);
+			default: print_hello;
+		}
+		cha = 'e';
+		i = i - 1;
+	}while(i > 3)
+	k = add(i,j);
+	print_all(k);
+	print_all(add_a(k));
+	print_all(add_10(k));
+	print_all(add_1_a(k));
+	print_char(getch);
+	printf("read i:");
+	scanf(i);
+	print_all(i);
+	printf("read j,k:");
+	scanf(j,k);
+	print_all(j);
+	print_all(k);
+	print_num(n(i));
+	print_num(a);
+	print_num(B);
+	print_num(_d);
+	print_char(c_0);
+	print_char(c_1);
+	print_char(_c_2);
+	print_char(C3);
+	print_char(C_4);
+	print_char(_C_5_);
+	return ;
+}
