@@ -1,0 +1,213 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EduAdmin - Calendar</title>
+
+<link href="/static/css/bootstrap.min.css" rel="stylesheet">
+<link href="/static/css/datepicker3.css" rel="stylesheet">
+<link href="/static/css/styles.css" rel="stylesheet">
+<link rel="stylesheet" href="/static/js/css/layui.css" media="all">
+</head>
+
+<body>
+	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#sidebar-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#"><span>EduAdmin</span>System</a>
+				<ul class="user-menu">
+					<li class="dropdown pull-right">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> <label id = "username"></label> <span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="/changeaccount/"><span class="glyphicon glyphicon-user"></span> 信息修改</a></li>
+							
+							<li><a href="/accounts/logout/"><span class="glyphicon glyphicon-log-out"></span> 登出</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+							
+		</div><!-- /.container-fluid -->
+	</nav>
+		
+	<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+		<form role="search">
+			<div class="form-group">
+				
+			</div>
+		</form>
+		<ul class="nav menu">
+			<li><a href="/edu_admin_resource/"><span class="glyphicon glyphicon-th"></span> 关联课程</a></li>
+			<li><a href="/edu_admin_table/"><span class="glyphicon glyphicon-th"></span> 学生花名表</a></li>
+			<li class="active"><a href="/edu_admin_pt/"><span class="glyphicon glyphicon-th"></span> 计划表</a></li>
+			
+			<li role="presentation" class="divider"></li>
+		</ul>
+	</div>
+		
+	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">		
+		<div class="row">
+			<ol class="breadcrumb">
+				<li><a href="#"><span class="glyphicon glyphicon-home"></span></a></li>
+				<li class="active">计划表</li>
+			</ol>
+		</div><!--/.row-->
+		
+		<div class="row">
+			<div class="col-lg-12">
+				<h1 class="page-header">计划表</h1>
+			</div>
+		</div><!--/.row-->	
+				
+		<div class="row">
+			<div class="col-md-4">
+			
+				<div class="panel panel-red">
+					<div class="panel-heading dark-overlay"><span class="glyphicon glyphicon-calendar"></span>日历</div>
+					<div class="panel-body">
+						<div id="calendar"></div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="panel panel-blue">
+					<div class="panel-heading dark-overlay"><span class="glyphicon glyphicon-check"></span>计划表</div>
+					<div class="panel-body">
+						<ul class="todo-list" id = "todolist"></ul>
+					</div>
+					<div class="panel-footer">
+						<div class="input-group">
+							<input id="content" class="form-control input-md" placeholder="Add new task" />
+							<p><input  class="layui-input" id="ddl"></p>
+							<p><span class="input-group-btn">
+								<button style="margin-top:20px;" class="btn btn-primary btn-md" id="btn-todo" onclick = "addlist()">新建</button>
+							</span></p>
+						</div>
+					</div>
+				</div>		
+			</div>
+		</div><!--/.row-->
+	</div>	<!--/.main-->	  
+	<script src="/static/js/jquery-1.11.1.min.js"></script>
+	<script src="/static/js/bootstrap.min.js"></script>
+	<script src="/static/js/chart.min.js"></script>
+	<script src="/static/js/chart-data.js"></script>
+	<script src="/static/js/easypiechart.js"></script>
+	<script src="/static/js/easypiechart-data.js"></script>
+	<script src="/static/js/bootstrap-datepicker.js"></script>
+		<script src="/static/js/layui.js "></script>
+	<script>
+	layui.use('laydate', function(){
+		var laydate = layui.laydate;
+		 
+		//执行一个laydate实例
+		laydate.render({
+			elem: '#ddl' //指定元素
+			,type: 'datetime'
+		});
+	});
+	</script>
+	<script>
+		$('#calendar').datepicker({
+		});
+
+		!function ($) {
+		    $(document).on("click","ul.nav li.parent > a > span.icon", function(){          
+		        $(this).find('em:first').toggleClass("glyphicon-minus");      
+		    }); 
+		    $(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
+		}(window.jQuery);
+
+		$(window).on('resize', function () {
+		  if ($(window).width() > 768) $('#sidebar-collapse').collapse('show')
+		})
+		$(window).on('resize', function () {
+		  if ($(window).width() <= 767) $('#sidebar-collapse').collapse('hide')
+		})
+	</script>	
+	<script>
+		$(function(){
+			$.ajax({
+				type : "GET",//请求方式
+				url : "/accounts/getUserInfos/",//地址，就是json文件的请求路径
+				dataType : "json",//数据类型可以为 text xml json  script  jsonp
+　　　　　　　　success : function(data){//返回的参数就是 action里面所有的有get和set方法的参数
+					document.getElementById('username').innerHTML = data.username;
+				},
+			});
+		});	
+	</script>
+	<script>
+		$(function(){
+			$.ajax({
+				type : "GET",//请求方式
+				url : "/list/getlist/",//地址，就是json文件的请求路径
+				dataType : "json",//数据类型可以为 text xml json  script  jsonp
+　　　　　　　　success : function(data){//返回的参数就是 action里面所有的有get和set方法的参数
+					for(var i=0;i<data.num;i++){
+					    if(data.lists[i].is_valid == 0){//表示没完成
+							$("#todolist").append("<li class='todo-list-item'><div class='checkbox'><input type='checkbox' id='checkbox' onclick = 'finishlist("+JSON.stringify(data)+","+i+")'/><label >"+data.lists[i].list_content+"	"+formatUTC(data.lists[i].list_time)+"</label></div></li>");
+						}
+					}
+				},
+			});
+		});	
+		function addlist(){
+			var content = document.getElementById("content").value;
+			var ddl = document.getElementById("ddl").value;
+			$.ajax({
+				type : "POST",//请求方式
+				url : "/list/addlist/",//地址，就是json文件的请求路径
+				dataType : "json",
+				data:{"list_content":content,"list_time":ddl},
+　　　　　　　　success : function(data){//返回的参数就是 action里面所有的有get和set方法的参数
+					alert("上传成功");
+					history.go(0);
+				},
+			});
+		};
+		function finishlist(data,i){
+			var list_id = data.lists[i].list_id;
+			$.ajax({
+				type : "POST",
+				url : "/list/finishlist/",
+				dataType : "json",
+				data:{"list_id":list_id},
+　　　　　　　　success : function(data){
+					alert("删除成功");
+					history.go(0);
+				},
+			});
+		};
+		function formatUTC(utc_datetime) {
+		// 转为正常的时间格式 年-月-日 时:分:秒
+		    utc_datetime = utc_datetime+"Z";
+			var T_pos = utc_datetime.indexOf(' ');
+			var Z_pos = utc_datetime.indexOf('Z');
+			var year_month_day = utc_datetime.substr(0,T_pos);
+			var hour_minute_second = utc_datetime.substr(T_pos+1,Z_pos-T_pos-1);
+			var new_datetime = year_month_day+" "+hour_minute_second; // 2017-03-31 08:02:06
+
+			// 处理成为时间戳
+			timestamp = new Date(Date.parse(new_datetime));
+			timestamp = timestamp.getTime();
+			timestamp = timestamp/1000;
+
+			// 增加8个小时，北京时间比utc时间多八个时区
+			var timestamp = timestamp+8*60*60;
+
+			// 时间戳转为时间
+			var beijing_datetime = new Date(parseInt(timestamp) * 1000).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ");
+			return beijing_datetime;
+		}
+	</script>			
+</body>
+
+</html>

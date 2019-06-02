@@ -1,0 +1,131 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Account</title>
+		<!--用百度的静态资源库的cdn安装bootstrap环境-->
+		<!-- Bootstrap 核心 CSS 文件 -->
+		<link href="/static/css/bootstrap.min.css" rel="stylesheet">
+		<!--font-awesome 核心我CSS 文件-->
+		<link href="/static/css/font-awesome.min.css" rel="stylesheet">
+		<!-- 在bootstrap.min.js 之前引入 -->
+		<script src="http://apps.bdimg.com/libs/jquery/2.0.0/jquery.min.js"></script>
+		<!-- Bootstrap 核心 JavaScript 文件 -->
+		<script src="/static/js/bootstrap.min.js"></script>
+		<!--jquery.validate-->
+		<script type="text/javascript" src="/static/js/jquery.validate.min.js" ></script>
+		<script type="text/javascript" src="/static/js/message.js" ></script>
+		
+		<!-- 以下内容按css解析 --><!-- 保证在不同大小的屏幕上都能全覆盖 --><!-- 设置为半透明的背景色 --><!-- 登录界面显示 --><!-- 注册界面隐藏 -->
+		<style type="text/css">
+			body{background: url(/static/imgs/3.jpg) no-repeat;background-size: cover;font-size: 16px;positon:absolute}
+			.form{background: rgba(255,255,255,0.2);width:400px;margin:100px auto;}
+			.fa{display: inline-block;top: 27px;left: 6px;position: relative;color: #ccc;}
+			input[type="text"],input[type="password"]{padding-left:26px;}
+			.checkbox{padding-left:21px;}
+		</style>
+	</head>
+	<body>
+	<div class="form row">
+		<form class="form-horizontal col-sm-offset-3 col-md-offset-3" id="change_form">
+			 <h3 class="form-title">Change your account</h3> 
+				 <div class="col-sm-9 col-md-9"> 
+					<div class="form-group">
+						<i class="fa fa-lock fa-lg"></i>
+						<label for="username">Username</label>
+						<input class="form-control required" type="text" placeholder="username" id="username" name="username" disabled=""/>
+						<label class="help-block">Your username is for logging in and cannot be changed.</label>
+					</div>
+					<div class="form-group">
+						<i class="fa fa-lock fa-lg"></i>
+						<label for="userno">Userno</label>
+						<input class="form-control required" type="text" placeholder="userno" id="userno" name="userno" disabled=""/>
+						<label class="help-block">Your userno cannot be changed.</label>
+					</div>
+					<div class="form-group">
+						<i class="fa fa-lock fa-lg"></i>
+						<label for="email">Email Address</label>
+						<input class="form-control required" type="text" placeholder="email" id="email" name="email" disabled=""/>
+						<label class="help-block">Your email cannot be changed.</label>
+					</div>
+					<div class="form-group">
+						<i class="fa fa-lock fa-lg"></i>
+						<label for="password">Password</label>
+						<input class="form-control required" type="password" placeholder="Password" id="password" name="password" />
+					</div>
+					<div class="form-group">
+						<i class="fa fa-check fa-lg"></i>
+						<label for="password">Re-type Password</label>
+						<input class="form-control required" type="password" placeholder="Re-type Your Password" id="rpassword" name="rpassword" />
+					</div>
+					<div class="form-actions">
+						<a type="submit" class="btn btn-success pull-left" onclick = "change()">Save</a>
+						<a onclick = "javascript:window.history.go(-1);" class="btn btn-info pull-right">Back</a>
+					</div> 
+
+				 </div> 
+			</div>
+		</form>
+	</div>
+	
+    <script>
+		$(function(){
+			$.ajax({
+				type : "GET",//请求方式
+				url : "/accounts/getUserInfos/",//地址，就是json文件的请求路径
+				dataType : "json",//数据类型可以为 text xml json  script  jsonp
+　　　　　　　　success : function(data){//返回的参数就是 action里面所有的有get和set方法的参数
+					document.getElementById('username').value = data.username;
+					document.getElementById('userno').value = data.userno;
+					document.getElementById('email').value = data.email;
+				},
+			});
+		});	
+	</script>
+	<script>
+		function change(){
+		    var pwd = document.getElementById('password').value;
+			if(pwd.length<5){
+				alert("输入的密码长度不能小于5个字符");
+			}
+			else{
+				$.ajax({
+					type : "POST",
+					url : "/accounts/changePwd/",
+					dataType : "json",
+					data: {'password':pwd},
+	　　　　　　　　success : function(data){
+						alert("修改密码成功");
+						window.history.go(-1);
+						//window.location.href = /fox1/;
+					},
+				});
+			}
+		};	
+	</script>
+	<script type="text/javascript" >
+		$().ready(function() {	
+			$("#change_form").validate({
+				rules: {
+					password: {
+						required: true,
+						minlength: 5
+					},
+					rpassword: {
+						equalTo: "#password"
+					},
+				},
+				messages: {
+					password: {
+						required: "请输入密码",
+						minlength: jQuery.format("密码不能小于{0}个字符")
+					},
+					rpassword: {
+						equalTo: "两次密码不一样"
+					},
+				}
+			});
+		});
+	</script>
+	</body>
+</html>

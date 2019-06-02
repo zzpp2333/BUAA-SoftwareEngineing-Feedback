@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>教务人员管理系统</title>
+
+<link href="/static/css/bootstrap.min.css" rel="stylesheet">
+<link href="/static/css/datepicker3.css" rel="stylesheet">
+<link href="/static/css/styles.css" rel="stylesheet">
+
+<style type="text/css">
+	table{
+	    font-size:14px;
+	}
+	thead,tr{
+	    border-top-width: 1px;
+	border-top-style: solid;
+	border-top-color: rgb(211, 202, 221);
+	}
+	table{
+	    table-layout:fixed;
+	    empty-cells:show; 
+	    border-collapse: collapse;
+	    margin:0 auto;
+	    border-bottom-width: 1px;
+	    border-bottom-style: solid;
+	    border-bottom-color: rgb(211, 202, 221);
+	}
+	td,th{
+	     padding: 5px 10px;
+	    font-size: 14px;
+	    font-family: Verdana;
+	    color: rgb(95, 74, 121);
+	}
+	h2,h3{
+	    font-size:14px;
+	    margin:0;
+	    padding:0;
+	} 
+	tr:nth-child(even) {
+	background: rgb(223, 216, 232)
+	            }
+	tr:nth-child(odd) {
+	            background: #FFF
+	            }
+	.title { background: #FFF; border: 1px solid #9DB3C5; padding: 1px; width:90%;margin:20px auto; }
+	        .title th, .title td { border: 1px solid #CAD9EA; padding: 5px; } 
+</style>
+
+</head>
+
+<body>
+	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#sidebar-collapse">
+				<!--botton按钮定义三根横杠，navbar-toggle控制三根斑马线，cpllapsed响应折叠,内容指向data-target里面的内容，即id为sidebar-collapse的内容-->
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<!--这是开头的hello student-->
+				<a class="navbar-brand" href="#"><span>EduAdmin</span>System</a>
+				<ul class="user-menu">
+					<li class="dropdown pull-right">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> <label id = "username"></label> <span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="/changeaccount/"><span class="glyphicon glyphicon-user"></span> 信息修改</a></li>
+							
+							<li><a href="/accounts/logout/"><span class="glyphicon glyphicon-log-out"></span> 登出</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div><!-- /.container-fluid -->
+	</nav>
+		
+	<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+		<form role="search">
+			<div class="form-group">
+				
+			</div>
+		</form>
+		<ul class="nav menu">
+			<li class="active"><a href="/edu_admin_resource/"><span class="glyphicon glyphicon-th"></span> 关联课程</a></li>
+			<li><a href="/edu_admin_table/"><span class="glyphicon glyphicon-th"></span> 学生花名表</a></li>
+			<li><a href="/edu_admin_pt/"><span class="glyphicon glyphicon-th"></span> 计划表</a></li>
+			<li role="presentation" class="divider"></li>
+		</ul>
+	</div>
+		
+	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">			
+		<div class="row">
+			<ol class="breadcrumb">
+				<li><a href="#"><span class="glyphicon glyphicon-home"></span></a></li>
+				<li class="active">课程</li>
+			</ol>
+		</div><!--/.row-->
+		
+		<div class="row">
+			<div class="col-lg-12">
+				<h1 class="page-header">待同意课程</h1>
+			</div>
+		</div>
+        
+	<div class="ibox-content col-md-12" style="  height: 100%; width: 100%">
+		<table width="90%" id="table" class="t1">
+		  <thead>
+		    <th width="70%">课程名</th>
+		    <th width="20%"></th>
+		  </thead>
+		</table>
+	</div>
+		
+	</div>	
+	<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script src="/static/js/jquery-1.11.1.min.js"></script>
+	<script src="/static/js/bootstrap.min.js"></script>
+	<script src="/static/js/chart.min.js"></script>
+	<script src="/static/js/chart-data.js"></script>
+	<script src="/static/js/easypiechart.js"></script>
+	<script src="/static/js/easypiechart-data.js"></script>
+	<script src="/static/js/bootstrap-datepicker.js"></script>
+	<script>
+		!function ($) {
+		    $(document).on("click","ul.nav li.parent > a > span.icon", function(){          
+		        $(this).find('em:first').toggleClass("glyphicon-minus");      
+		    }); 
+		    $(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
+		}(window.jQuery);
+
+		$(window).on('resize', function () {
+		  if ($(window).width() > 768) $('#sidebar-collapse').collapse('show')
+		})
+		$(window).on('resize', function () {
+		  if ($(window).width() <= 767) $('#sidebar-collapse').collapse('hide')
+		})
+	</script>	
+	<script>
+		$(function () {
+			$.ajax({
+				type : "GET",//请求方式
+				url : "/courses/getCourses/",//地址，就是json文件的请求路径
+				dataType : "json",//数据类型可以为 text xml json  script  jsonp
+	　　　　　　success : function(data){//返回的参数就是 action里面所有的有get和set方法的参数
+					var html="";
+					for(var i=0;i<data.num;i++){
+						if(!data.courses[i].is_valid){
+							var iiid = data.courses[i].course_id;
+							html="<tr>" +
+							"<td class='sco1'>"+data.courses[i].course_name+"</td>"+
+							"<td>"+"<input type='button' id='btn' name='checkbox' value='同意' onclick='agree(this)'/>"+"</td>"+
+							"</tr>";
+							$("#table").append(html);	
+							document.getElementById('btn').id = iiid;
+						}
+						else{
+							html="<tr>" +
+							"<td class='sco1'>"+data.courses[i].course_name+"</td>"+
+							"<td>"+"<input type='button' id='btn1' name='checkbox' value='已同意' disabled='true'/>"+"</td>"+
+							"</tr>";
+							$("#table").append(html);	
+						}
+					}
+					document.getElementById('username').innerHTML = data.name;
+				}
+			});
+		});
+
+		function agree(element){
+		    $.ajax({    
+				type:'POST',    
+				url:'/courses/checkCourse/',    
+				data:{'course_id':element.id},   
+				success:function(data){
+					if(data.success){
+						document.getElementById(element.id).disabled=false;
+						element.value="已同意";
+						alert("同意成功");
+					}
+				}
+			});
+		};
+	</script>
+</body>
+</html>

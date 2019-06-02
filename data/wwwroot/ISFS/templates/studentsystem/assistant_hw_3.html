@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Assistant - Homework</title>
+
+<link href="/static/css/bootstrap.min.css" rel="stylesheet">
+<link href="/static/css/datepicker3.css" rel="stylesheet">
+<link href="/static/css/styles.css" rel="stylesheet">
+
+<style type="text/css">
+	body,table{
+	    font-size:14px;
+	}
+	thead,tr{
+	    border-top-width: 1px;
+	border-top-style: solid;
+	border-top-color: rgb(211, 202, 221);
+	}
+	table{
+	    table-layout:fixed;
+	    empty-cells:show; 
+	    border-collapse: collapse;
+	    margin:0 auto;
+	    border-bottom-width: 1px;
+	    border-bottom-style: solid;
+	    border-bottom-color: rgb(211, 202, 221);
+	}
+	td,th{
+	     padding: 5px 10px;
+	    font-size: 12px;
+	    font-family: Verdana;
+	    color: rgb(95, 74, 121);
+	}
+	h2,h3{
+	    font-size:14px;
+	    margin:0;
+	    padding:0;
+	}
+	tr:nth-child(even) {
+	background: rgb(223, 216, 232)
+	            }
+	tr:nth-child(odd) {
+	            background: #FFF
+	            }
+	.title { background: #FFF; border: 1px solid #9DB3C5; padding: 1px; width:90%;margin:20px auto; }
+	        .title th, .title td { border: 1px solid #CAD9EA; padding: 5px; }
+</style>
+</head>
+
+<body>
+	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#sidebar-collapse">
+				<!--botton按钮定义三根横杠，navbar-toggle控制三根斑马线，cpllapsed响应折叠,内容指向data-target里面的内容，即id为sidebar-collapse的内容-->
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<!--这是开头的hello student-->
+				<a class="navbar-brand" href="#"><span>Assistant</span>System</a>
+				<ul class="user-menu">
+					<li class="dropdown pull-right">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> <label id = "username" ></label>  <span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="/changeaccount/"><span class="glyphicon glyphicon-user"></span> 信息修改</a></li>
+							
+							<li><a href="/accounts/logout/"><span class="glyphicon glyphicon-log-out"></span> 登出</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div><!-- /.container-fluid -->
+	</nav>
+		
+	<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+		<form role="search">
+			<div class="form-group">
+				
+			</div>
+		</form>
+		<ul class="nav menu">
+			<li><a href="/assistant_resource/"><span class="glyphicon glyphicon-list"></span> 课程资源</a></li>
+			<li><a href="/assistant_pt/"><span class="glyphicon glyphicon-th"></span> 计划表</a></li>
+			<li><a href="/assistant_chat_forhead/"><span class="glyphicon glyphicon-list-alt"></span> 讨论区</a></li>
+			<li class="active"><a href="/assistant_hw/"><span class="glyphicon glyphicon-pencil"></span> 作业</a></li>
+			<li role="presentation" class="divider"></li>
+			<li><a href="/stu_resource/"><span class="glyphicon glyphicon-share-alt"></span> 返回学生区</a></li>
+		</ul>
+	</div>
+		
+	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">			
+		<div class="row">
+			<ol class="breadcrumb">
+				<li><a href="#"><span class="glyphicon glyphicon-home"></span></a></li>
+				<li class="active">作业</li>
+			</ol>
+		</div><!--/.row-->
+		
+		<div class="row">
+			<div class="col-lg-12">
+				<h1 class="page-header">作业</h1>
+			</div>
+		</div><!--/.row-->
+		
+		<div class="form-group" id = "down">
+			<label>下载作业</label>
+			<a id='dl' download='.txt' >点击下载</a>			
+		</div>
+		<div>
+			<label>作业正文：</label>
+			<label id="hwcontent" ></label>
+		</div>
+		<form method="post" id="uploadform" action="" enctype="multipart/form-data">
+			<input type="text" name="content" id="grade" placeholder="请输入成绩"/>
+			<a href= "javascript:void(0)" onclick="submit()" type="submit" class="btn btn-primary">提交</a>
+			<a href = "javascript:window.history.go(-1);" type="reset" class="btn btn-default">返回</a>
+		</form>	
+	</div><!--/.main-->
+
+	<script src="/static/js/jquery-1.11.1.min.js"></script>
+	<script src="/static/js/bootstrap.min.js"></script>
+	<script src="/static/js/chart.min.js"></script>
+	<script src="/static/js/chart-data.js"></script>
+	<script src="/static/js/easypiechart.js"></script>
+	<script src="/static/js/easypiechart-data.js"></script>
+	<script src="/static/js/bootstrap-datepicker.js"></script>
+	<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script type="text/javascript">
+		var text = document.getElementById("grade");
+		text.onkeyup = function(){
+			this.value=this.value.replace(/\D/g,'');
+			if(text.value>100){
+				text.value = 100;
+			}
+		}		
+	</script>
+	<script>
+		!function ($) {
+			$(document).on("click","ul.nav li.parent > a > span.icon", function(){		  
+				$(this).find('em:first').toggleClass("glyphicon-minus");	  
+			}); 
+			$(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
+		}(window.jQuery);
+
+		$(window).on('resize', function () {
+		  if ($(window).width() > 768) $('#sidebar-collapse').collapse('show')
+		})
+		$(window).on('resize', function () {
+		  if ($(window).width() <= 767) $('#sidebar-collapse').collapse('hide')
+		})
+	</script>
+	<script>
+	$(function(){
+		var url = decodeURI(window.location.href);
+		var array = url.split("?").pop().split("&");
+		var argsIndex1 = array[0].split("homeworkid=");
+		var argsIndex2 = array[1].split("filepath=");
+		var argsIndex4 = array[3].split("isfile=");
+		var filepath= argsIndex2[1];
+		var isfile = argsIndex4[1];
+		document.getElementById('dl').href = filepath;
+		if(isfile=="false"){
+			$("#down").remove();
+		}
+	});	
+	function submit() {
+		var url = decodeURI(window.location.href);
+		var array = url.split("?").pop().split("&");
+		var argsIndex1 = array[0].split("homeworkid=");
+		var homeworkid=argsIndex1[1];
+		var formData = new FormData();
+		formData.append('homework_id',homeworkid);
+		formData.append('grade',$("#grade").val());
+		console.log(formData);
+		$.ajax({
+			url:'/homework/correctHomework/',
+			type: 'POST',
+			processData:false,
+			contentType:false,
+			data:formData,
+			success:function (data) {
+				alert("success");
+				window.history.go(-1);
+			}
+		});
+	}
+	</script>
+	<script>
+		$(function(){
+			var url = decodeURI(window.location.href);
+			var array = url.split("?").pop().split("&");
+			var argsIndex1 = array[0].split("homeworkid=");
+			var argsIndex2 = array[1].split("filepath=");
+			var argsIndex3 = array[2].split("courseid=");
+			var courseid = argsIndex3[1];
+			var hwid = argsIndex1[1];
+			$.ajax({
+				type : "POST",//请求方式
+				url : "/homework/Homeworkcontent/",//地址，就是json文件的请求路径
+				dataType : "json",
+				data:{"hw_id":hwid},
+　　　　　　　　success : function(data){
+					document.getElementById('hwcontent').innerHTML = data.content;
+				},
+			});
+		});
+	</script>
+	<script>
+		$(function(){
+			$.ajax({
+				type : "GET",//请求方式
+				url : "/accounts/getUserInfos/",//地址，就是json文件的请求路径
+				dataType : "json",//数据类型可以为 text xml json  script  jsonp
+　　　　　　　　success : function(data){//返回的参数就是 action里面所有的有get和set方法的参数
+					document.getElementById('username').innerHTML = data.username;
+				},
+			});
+		});	
+	</script>	
+</body>
+
+</html>
